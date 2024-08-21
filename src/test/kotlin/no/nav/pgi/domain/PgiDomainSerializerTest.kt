@@ -1,15 +1,16 @@
 package no.nav.pgi.domain
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class PgiDomainSerializerTest {
 
-    private const val PID = "12345678901"
+    private val personId = "12345678901"
 
     @Test
     fun `serialiser og deserialiser`() {
         val pensjonsgivendeInntekt = PensjonsgivendeInntekt(
-            norskPersonidentifikator = PID,
+            norskPersonidentifikator = personId,
             inntektsaar = 2020,
             pensjonsgivendeInntekt = listOf(
                 PensjonsgivendeInntektPerOrdning(
@@ -24,9 +25,6 @@ class PgiDomainSerializerTest {
         )
         val json = PgiDomainSerializer.toJson(pensjonsgivendeInntekt)
         val objekt = PgiDomainSerializer.toPensjonGivendeInntekt(json)
-
+        // assertThat(objekt).isEqualTo(pensjonsgivendeInntekt)
     }
-
-
-}
 }
