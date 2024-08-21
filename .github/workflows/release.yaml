@@ -1,9 +1,9 @@
-name: Release pensjon-samhandling-ktor-support
+name: Release pgi-domain
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   release:

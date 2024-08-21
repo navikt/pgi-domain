@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val avroVersion = "1.10.0"
-
 group = "no.nav.pgi"
+
+val jacksonVersion = "2.17.2"
 
 val junitJupiterVersion = "5.11.0"
 val assertJVersion = "3.26.3"
@@ -24,10 +24,11 @@ plugins {
 }
 
 dependencies {
+    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
     testImplementation(("org.assertj:assertj-core:$assertJVersion"))
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
 }
 
 java {
