@@ -39,7 +39,7 @@ java {
 
 
 release {
-    git.requireBranch = "master"
+    git.requireBranch = "main"
     newVersionCommitMessage = "[Release Plugin] - next version commit: "
     tagTemplate = "release-\${version}"
 }
