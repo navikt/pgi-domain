@@ -5,6 +5,7 @@ val avroVersion = "1.10.0"
 group = "no.nav.pgi"
 
 val junitJupiterVersion = "5.11.0"
+val assertJVersion = "3.26.3"
 
 repositories {
     mavenCentral()
@@ -26,6 +27,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+    testImplementation(("org.assertj:assertj-core:$assertJVersion"))
 }
 
 java {
