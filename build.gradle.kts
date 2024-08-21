@@ -1,6 +1,10 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val avroVersion = "1.10.0"
 
 group = "no.nav.pgi"
+
+val junitJupiterVersion = "5.11.0"
 
 repositories {
     mavenCentral()
@@ -19,7 +23,9 @@ plugins {
 }
 
 dependencies {
-    implementation("org.apache.avro:avro:$avroVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
 }
 
 java {
@@ -31,6 +37,8 @@ java {
 
 release {
     git.requireBranch = "master"
+    newVersionCommitMessage = "[Release Plugin] - next version commit: "
+    tagTemplate = "release-\${version}"
 }
 
 publishing {
@@ -51,6 +59,18 @@ publishing {
     }
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}
+
 tasks.withType<Wrapper> {
     gradleVersion = "8.10"
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "17"
 }

@@ -1,2 +1,2 @@
-rootProject.name = "pgi-schema"
+rootProject.name = "pgi-domain"
 
