@@ -20,8 +20,9 @@ class PgiDomainSerializerTest {
                     pensjonsgivendeInntektAvLoennsinntektBarePensjonsdel = 2,
                     pensjonsgivendeInntektAvNaeringsinntekt = 3,
                     pensjonsgivendeInntektAvNaeringsinntektFraFiskeFangstEllerFamiliebarnehage = 4,
-                )
-            )
+                ),
+            ),
+            metaData = PensjonsgivendeInntektMetadata(retries = 0, sekvensnummer = 42)
         )
         val json = PgiDomainSerializer.toJson(pensjonsgivendeInntekt)
         val objekt = PgiDomainSerializer.toPensjonGivendeInntekt(json)
