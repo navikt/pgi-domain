@@ -1,14 +1,25 @@
 package no.nav.pgi.domain
 
+import no.nav.pgi.domain.serialization.PgiDomainSerializer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PgiDomainSerializerTest {
+class PgiDomainPgiDomainSerializerTest {
 
     private val personId = "12345678901"
 
+
     @Test
-    fun `serialiser og deserialiser`() {
+    fun `serialiser og deserialiser HendelseKey`() {
+        val key = HendelseKey(identifikator = "12345678901", gjelderPeriode = "Q1")
+        val json = PgiDomainSerializer().toJson(key)
+        println(json)
+        val value = PgiDomainSerializer().fromJson(pgiDomainObjectClass = HendelseKey::class, json)
+        assertThat(value).isEqualTo(key)
+    }
+
+    @Test
+    fun `serialiser og deserialiser PensjonsgivendeInntekt`() {
         val pensjonsgivendeInntekt = PensjonsgivendeInntekt(
             norskPersonidentifikator = personId,
             inntektsaar = 2020,
@@ -24,8 +35,9 @@ class PgiDomainSerializerTest {
             ),
             metaData = PensjonsgivendeInntektMetadata(retries = 0, sekvensnummer = 42)
         )
-        val json = PgiDomainSerializer.toJson(pensjonsgivendeInntekt)
-        val objekt = PgiDomainSerializer.toPensjonGivendeInntekt(json)
-        // assertThat(objekt).isEqualTo(pensjonsgivendeInntekt)
+        val json = PgiDomainSerializer().toJson(pensjonsgivendeInntekt)
+        println(json)
+        val value = PgiDomainSerializer().fromJson(PensjonsgivendeInntekt::class, json)
+        assertThat(value).isEqualTo(pensjonsgivendeInntekt)
     }
 }
