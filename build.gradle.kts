@@ -1,26 +1,30 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "no.nav.pgi"
 
-val jacksonVersion = "2.17.2"
+val jacksonVersion = "2.20.0"
 
 val junitJupiterVersion = "5.11.0"
 val assertJVersion = "3.26.3"
 
 repositories {
     mavenCentral()
-    maven(url = "https://dl.bintray.com/gradle/gradle-plugins")
-    maven(url = "https://packages.confluent.io/maven/")
+//    maven(url = "https://dl.bintray.com/gradle/gradle-plugins")
 }
 
 plugins {
-    kotlin("jvm") version "1.9.10"
-    kotlin("plugin.serialization") version "1.9.10"
-    id("se.patrikerdes.use-latest-versions") version "0.2.18"
-    id("net.researchgate.release") version "3.0.2"
-    id("com.github.ben-manes.versions") version "0.51.0"
-    `maven-publish`
+    val kotlinVersion = "2.2.10"
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.serialization") version kotlinVersion
+    id("se.patrikerdes.use-latest-versions") version "0.2.19"
+    id("net.researchgate.release") version "3.1.0"
+    id("com.github.ben-manes.versions") version "0.53.0"
     `java-library`
+    `maven-publish`
 }
 
 dependencies {
@@ -30,11 +34,12 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
     testImplementation(("org.assertj:assertj-core:$assertJVersion"))
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -67,14 +72,22 @@ tasks.withType<Test> {
     useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed")
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        exceptionFormat = FULL
     }
 }
 
-tasks.withType<Wrapper> {
-    gradleVersion = "8.10"
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
+    }
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
+tasks.withType<DependencyUpdatesTask>().configureEach {
+    rejectVersionIf {
+        isNonStableVersion(candidate.version)
+    }
+}
+
+fun isNonStableVersion(version: String): Boolean {
+    return listOf("BETA", "RC", "-M").any { version.uppercase().contains(it) }
 }
