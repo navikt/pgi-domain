@@ -41,7 +41,8 @@ jobs:
 
       - name: 'Info'
         run: |
-          echo "RUN-ID: ${{ github.event.workflow_run.id }}"
+          echo "RUN.ID: ${{ github.event.workflow_run.id }}"
+          echo "RUN.RUN_ID: ${{ github.event.workflow_run.run_id }}"
 
       - name: 'List artifacts via API'
         run: |
@@ -58,12 +59,20 @@ jobs:
         run: |
           sleep 5
 
-      - name: 'Download release info'
+      - name: 'Download release info (id)'
+        uses: actions/download-artifact@v4
+        with:
+          name: release-info
+          path: .
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: 'Download release info (run_id)'
         uses: actions/download-artifact@v4
         with:
           name: release-info
           path: .
           run-id: ${{ github.event.workflow_run.run_id }}
+
 
       - name: 'Read release info'
         id: title
