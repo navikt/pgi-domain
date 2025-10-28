@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: read
+      contents: read
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: 'Extract workflow info'
@@ -46,6 +47,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: release-info
+          path: .
           run-id: ${{ github.event.workflow_run.id }}
 
       - name: 'Read release info'
