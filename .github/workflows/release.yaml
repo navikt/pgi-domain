@@ -27,7 +27,9 @@ jobs:
         run: git config user.email "${{ github.actor }}@users.noreply.github.com" && git config user.name "Github Actions"
 
       - name: 'Capture version number for release'
-        run: echo "VERSION=$(grep -v '^#' gradle.properties | grep 'version=' | cut -d '=' -f2 | xargs)" >> $GITHUB_ENV
+        run: |
+          echo "VERSION=$(grep -v '^#' gradle.properties | grep 'version=' | cut -d '=' -f2 | xargs)" >> $GITHUB_ENV
+          echo "COMMIT=$(echo ${{github.sha}} | cut -c 1-7)" >> $GITHUB_ENV
 
       - name: 'build and update version'
         env:
@@ -46,8 +48,8 @@ jobs:
 
       - name: 'Generate release info'
         run: |
-          echo "Releaset ${{github.sha}} som ${{ env.VERSION }}" > release_info.txt
-          
+          echo "Releaset ${{env.COMMIT}} som ${{ env.VERSION }}" > release_info.txt
+
       - name: 'Upload release info'
         uses: actions/upload-artifact@v4
         with:
