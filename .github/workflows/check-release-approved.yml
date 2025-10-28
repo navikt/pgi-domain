@@ -39,7 +39,7 @@ jobs:
           ID: '${{ github.event.workflow_run.id }}'
           ACTOR_URL: '${{ github.event.workflow_run.actor.html_url }}'
 
-      - name: 'Download through REST API'
+      - name: 'Download run info from previous workflow'
         run: |
           echo "Fetching artifacts for run ID: $RUN_ID"
           ARTIFACT_ID=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
