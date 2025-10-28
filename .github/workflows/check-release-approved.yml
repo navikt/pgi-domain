@@ -54,18 +54,35 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ github.event.workflow_run.id }}
 
+      - name: 'Download through REST API'
+        run: |
+          echo "Fetching artifacts for run ID: $RUN_ID"
+          ARTIFACT_ID=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/runs/$RUN_ID/artifacts \
+            | jq -r '.artifacts [] | select(.name=="release-info") | .id')
+          echo "ARTIFACT_ID=$ARTIFACT_ID"
+          curl -L -H "Authorization: Bearer $GH_TOKEN" \
+          -o release-info.zip \
+          https://api.github.com/repos/$({ github.repository }}/actions/artifacts/$ARTIFACT_ID/zip
+          echo "Unzipping:"
+          unzip artifact.zip -d .
+
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+
+
       - name: 'Delay'
         run: |
           sleep 5
 
-      - name: 'Download release info (id)'
-        uses: actions/download-artifact@v4
-        with:
-          name: release-info
-          path: .
-          run-id: ${{ github.event.workflow_run.id }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITGUB_TOKEN }}
+#      - name: 'Download release info (id)'
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: release-info
+#          path: .
+#          run-id: ${{ github.event.workflow_run.id }}
 
       - name: 'Read release info'
         id: title
