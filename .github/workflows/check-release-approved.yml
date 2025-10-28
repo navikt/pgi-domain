@@ -40,7 +40,7 @@ jobs:
 
       - name: 'Info'
         run: |
-          echo "RUN-ID: ${{ github.event.workflow_run.id }}
+          echo "RUN-ID: ${{ github.event.workflow_run.id }}"
 
       - name: 'Download release info'
         uses: actions/download-artifact@v4
