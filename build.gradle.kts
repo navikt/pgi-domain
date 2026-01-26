@@ -9,7 +9,7 @@ group = "no.nav.pgi"
 val jacksonVersion = "2.20.0"
 
 val junitJupiterVersion = "5.11.0"
-val assertJVersion = "3.26.3"
+val assertJVersion = "3.27.7"
 
 repositories {
     mavenCentral()
